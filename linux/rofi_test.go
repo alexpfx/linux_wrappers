@@ -19,7 +19,15 @@ func TestNewRofi(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			rofi := NewDMenu(tt.args.prompt)
 			_, err := rofi.Run("teste")
-			assert.NoError(t, err, "Nao esperava erro %s")
+			assert.NoError(t, err, "Nao esperava erro")
 		})
 	}
+}
+
+func TestNewMessageMenu(t *testing.T) {
+	t.Run("t1", func(t *testing.T) {
+		rofi := NewMessageMenu("mensagem de erro")
+		_, err := rofi.Run("")
+		assert.NoError(t, err, "Nao esperava erro")
+	})
 }

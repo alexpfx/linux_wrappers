@@ -20,6 +20,16 @@ func NewDMenu(prompt string) Rofi {
 	}
 }
 
+func NewMessageMenu(errMsg string) Rofi {
+	b := builder{
+		errMessage: errMsg,
+	}
+	return rofiMenu{
+		args: b.buildArgs(),
+	}
+
+}
+
 func (r rofiMenu) Run(input string) (string, error) {
 	var p *script.Pipe
 	cmdStr := fmt.Sprintf("%s %s", rofiCmd, strings.Join(r.args, " "))
@@ -43,9 +53,10 @@ type builder struct {
 	//	//'p' Selected string stripped from Pango markup (Needs to be a valid string)
 	//	//'f' filter string (user action)
 	//	//'F' quoted filter string (user action)
-	format string
-	mode   string
-	dMenu  bool
+	format     string
+	mode       string
+	dMenu      bool
+	errMessage string
 }
 
 func (r builder) buildArgs() []string {
@@ -59,6 +70,7 @@ func (r builder) buildArgs() []string {
 
 	argSlice = appendIf(argSlice, rofiThemeStr, r.themeStr)
 	argSlice = appendIf(argSlice, rofiFormat, r.format)
+	argSlice = appendIf(argSlice, rofiErrMsg, r.errMessage)
 
 	return argSlice
 
@@ -74,7 +86,7 @@ func appendIf(res []string, argName string, pValue interface{}) []string {
 	case reflect.String:
 		if vs.String() != "" {
 			res = appendArgName(res, argName)
-			res = append(res, fmt.Sprintf("%s", vs.String()))
+			res = append(res, fmt.Sprintf("'%s'", vs.String()))
 			return res
 		}
 

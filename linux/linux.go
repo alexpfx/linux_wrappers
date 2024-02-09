@@ -8,6 +8,7 @@ const (
 	rofiFormat     = "-format"
 	rofiMode       = "-show"
 	rofiDmenu      = "-dmenu"
+	rofiErrMsg     = "-e"
 )
 
 type Rofi interface {
