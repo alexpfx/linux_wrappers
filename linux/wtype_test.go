@@ -17,7 +17,7 @@ func TestNewWType(t *testing.T) {
 			DelayBeforeKeyStrokes: "1100",
 		})
 
-		r, err := w.Run("texto")
+		r, err := w.Run("texto$")
 		assert.NoError(t, err, r)
 
 	})
