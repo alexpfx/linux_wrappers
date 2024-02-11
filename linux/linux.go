@@ -6,29 +6,28 @@ import (
 	"reflect"
 )
 
-const (
-	rofiCmd        = "rofi"
-	rofiPrompt     = "-p"
-	rofiAutoSelect = "-auto-select"
-	rofiThemeStr   = "-theme-str"
-	rofiFormat     = "-format"
-	rofiMode       = "-show"
-	rofiDmenu      = "-dmenu"
-	rofiErrMsg     = "-e"
-)
+type KeyAction struct {
+	Label  string
+	Action func() string
+}
+
+type RofiKeyboard interface {
+	Show() (string, error)
+}
 
 type Rofi interface {
 	Run(input string) (string, error)
-}
-type rofiMenu struct {
-	args []string
 }
 
 type WType interface {
 	Run(text string) (string, error)
 }
 
-func appendIf(res []string, argName string, pValue interface{}) []string {
+type Yad interface {
+	Show() (string, error)
+}
+
+func AppendIf(res []string, argName string, pValue interface{}) []string {
 	if pValue == nil {
 		return res
 	}
@@ -52,9 +51,9 @@ func appendIf(res []string, argName string, pValue interface{}) []string {
 			vIndex := vs.Index(i)
 
 			if i == 0 {
-				res = appendIf(res, argName, vIndex.Interface())
+				res = AppendIf(res, argName, vIndex.Interface())
 			} else {
-				res = appendIf(res, "", vIndex.Interface())
+				res = AppendIf(res, "", vIndex.Interface())
 			}
 		}
 	case reflect.Int:

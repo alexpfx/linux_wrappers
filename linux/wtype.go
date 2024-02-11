@@ -17,11 +17,11 @@ const wtypePressKey = "-P"
 const wtypeReleaseKey = "-p"
 
 type wtype struct {
-	args []string
+	args string
 }
 
 func (w wtype) Run(text string) (string, error) {
-	cmdStr := fmt.Sprintf(`%s %s '%s'`, wtypeCmd, strings.Join(w.args, " "), text)
+	cmdStr := fmt.Sprintf(`%s %s '%s'`, wtypeCmd, w.args, text)
 	log.Printf("cmd: %s", cmdStr)
 	p := script.Exec(cmdStr)
 	return p.String()
@@ -47,19 +47,19 @@ type WTypeBuilder struct {
 	DelayBeforeKeyStrokes  string
 }
 
-func (r WTypeBuilder) buildArgs() []string {
+func (r WTypeBuilder) buildArgs() string {
 	argSlice := make([]string, 0)
 
-	argSlice = appendIf(argSlice, wtypePressMod, r.PressModifier)
-	argSlice = appendIf(argSlice, wtypeReleaseMod, r.ReleaseModifier)
-	argSlice = appendIf(argSlice, wtypePressKey, r.PressKey)
-	argSlice = appendIf(argSlice, wtypeReleaseKey, r.ReleaseKey)
-	argSlice = appendIf(argSlice, wtypeKey, r.Type)
+	argSlice = AppendIf(argSlice, wtypePressMod, r.PressModifier)
+	argSlice = AppendIf(argSlice, wtypeReleaseMod, r.ReleaseModifier)
+	argSlice = AppendIf(argSlice, wtypePressKey, r.PressKey)
+	argSlice = AppendIf(argSlice, wtypeReleaseKey, r.ReleaseKey)
+	argSlice = AppendIf(argSlice, wtypeKey, r.Type)
 
-	argSlice = appendIf(argSlice, wtypeDelayBetweenKeyStrokes, r.DelayBetweenKeyStrokes)
-	argSlice = appendIf(argSlice, wtypeDelayBeforeKeyStrokes, r.DelayBeforeKeyStrokes)
+	argSlice = AppendIf(argSlice, wtypeDelayBetweenKeyStrokes, r.DelayBetweenKeyStrokes)
+	argSlice = AppendIf(argSlice, wtypeDelayBeforeKeyStrokes, r.DelayBeforeKeyStrokes)
 
-	return argSlice
+	return strings.Join(argSlice, " ")
 }
 
 //

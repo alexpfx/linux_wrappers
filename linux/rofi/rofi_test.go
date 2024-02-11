@@ -1,6 +1,7 @@
-package linux
+package rofi
 
 import (
+	"github.com/alexpfx/linux_wrappers/linux"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -28,6 +29,21 @@ func TestNewMessageMenu(t *testing.T) {
 	t.Run("t1", func(t *testing.T) {
 		rofi := NewMessageMenu("mensagem de erro")
 		_, err := rofi.Run("")
+		assert.NoError(t, err, "Nao esperava erro")
+	})
+}
+
+func TestNewKeyboardMenu(t *testing.T) {
+	t.Run("t1", func(t *testing.T) {
+		rofi := NewKeyboardMenu(map[rune]linux.KeyAction{
+			'a': {
+				Label: "Hora",
+				Action: func() string {
+					return "a"
+				},
+			},
+		})
+		_, err := rofi.Show()
 		assert.NoError(t, err, "Nao esperava erro")
 	})
 }
