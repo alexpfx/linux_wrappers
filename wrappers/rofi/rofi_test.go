@@ -2,7 +2,6 @@ package rofi
 
 import (
 	"fmt"
-	"github.com/alexpfx/linux_wrappers/linux"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -36,7 +35,7 @@ func TestNewMessageMenu(t *testing.T) {
 
 func TestNewKeyboardMenu(t *testing.T) {
 	t.Run("t1", func(t *testing.T) {
-		rofi := NewKeyboardMenu(map[rune]linux.KeyAction{
+		rofi := NewKeyboardMenu(map[rune]KeyAction{
 			'a': {
 				Label: "Hora",
 				Action: func() string {

@@ -2,7 +2,7 @@ package yad
 
 import (
 	"fmt"
-	"github.com/alexpfx/linux_wrappers/linux"
+	"github.com/alexpfx/linux_wrappers/wrappers"
 	"github.com/bitfield/script"
 	"log"
 	"strings"
@@ -22,7 +22,7 @@ var (
 	}
 )
 
-func NewButtonBar(keymap []Btn) linux.Yad {
+func NewButtonBar(keymap []Btn) wrappers.Yad {
 	btns := make([]string, 0)
 	for _, keys := range lines {
 		for _, key := range keys {

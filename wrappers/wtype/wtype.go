@@ -1,7 +1,8 @@
-package linux
+package wtype
 
 import (
 	"fmt"
+	"github.com/alexpfx/linux_wrappers/wrappers"
 	"github.com/bitfield/script"
 	"log"
 	"strings"
@@ -27,14 +28,11 @@ func (w wtype) Run(text string) (string, error) {
 	return p.String()
 }
 
-func NewWType(builder WTypeBuilder) WType {
+func NewWType(builder WTypeBuilder) wrappers.WType {
 	args := builder.buildArgs()
 	return wtype{
 		args: args,
 	}
-}
-
-func Run() {
 }
 
 type WTypeBuilder struct {
@@ -50,14 +48,14 @@ type WTypeBuilder struct {
 func (r WTypeBuilder) buildArgs() string {
 	argSlice := make([]string, 0)
 
-	argSlice = AppendIf(argSlice, wtypePressMod, r.PressModifier)
-	argSlice = AppendIf(argSlice, wtypeReleaseMod, r.ReleaseModifier)
-	argSlice = AppendIf(argSlice, wtypePressKey, r.PressKey)
-	argSlice = AppendIf(argSlice, wtypeReleaseKey, r.ReleaseKey)
-	argSlice = AppendIf(argSlice, wtypeKey, r.Type)
+	argSlice = wrappers.AppendIf(argSlice, wtypePressMod, r.PressModifier)
+	argSlice = wrappers.AppendIf(argSlice, wtypeReleaseMod, r.ReleaseModifier)
+	argSlice = wrappers.AppendIf(argSlice, wtypePressKey, r.PressKey)
+	argSlice = wrappers.AppendIf(argSlice, wtypeReleaseKey, r.ReleaseKey)
+	argSlice = wrappers.AppendIf(argSlice, wtypeKey, r.Type)
 
-	argSlice = AppendIf(argSlice, wtypeDelayBetweenKeyStrokes, r.DelayBetweenKeyStrokes)
-	argSlice = AppendIf(argSlice, wtypeDelayBeforeKeyStrokes, r.DelayBeforeKeyStrokes)
+	argSlice = wrappers.AppendIf(argSlice, wtypeDelayBetweenKeyStrokes, r.DelayBetweenKeyStrokes)
+	argSlice = wrappers.AppendIf(argSlice, wtypeDelayBeforeKeyStrokes, r.DelayBeforeKeyStrokes)
 
 	return strings.Join(argSlice, " ")
 }

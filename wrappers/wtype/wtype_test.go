@@ -1,4 +1,4 @@
-package linux
+package wtype
 
 import (
 	"github.com/stretchr/testify/assert"

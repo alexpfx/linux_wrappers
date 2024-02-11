@@ -2,8 +2,9 @@ package rofi
 
 import (
 	"fmt"
-	"github.com/alexpfx/linux_wrappers/linux"
+	"github.com/alexpfx/linux_wrappers/wrappers"
 	"github.com/bitfield/script"
+	"strconv"
 	"strings"
 )
 
@@ -40,10 +41,10 @@ var kbMatrix = [4][11]rune{
 
 type rofiMenu struct {
 	args      string
-	actionMap map[rune]linux.KeyAction
+	actionMap map[rune]KeyAction
 }
 
-func NewDMenu(prompt string) linux.Rofi {
+func NewDMenu(prompt string) Rofi {
 	b := builder{
 		dMenu:  true,
 		prompt: prompt,
@@ -54,7 +55,7 @@ func NewDMenu(prompt string) linux.Rofi {
 	}
 }
 
-func NewMessageMenu(errMsg string) linux.Rofi {
+func NewMessageMenu(errMsg string) Rofi {
 	b := builder{
 		errMessage: errMsg,
 	}
@@ -64,13 +65,13 @@ func NewMessageMenu(errMsg string) linux.Rofi {
 
 }
 
-func NewKeyboardMenu(actionMap map[rune]linux.KeyAction) linux.RofiKeyboard {
+func NewKeyboardMenu(actionMap map[rune]KeyAction) RofiKeyboard {
 	b := builder{
 		autoSelect:      true,
 		dMenu:           true,
 		caseInsensitive: true,
 		sep:             "|",
-		format:          "s",
+		format:          "i",
 		pangoMarkup:     true,
 		matching:        "prefix",
 		themeStr: `
@@ -117,22 +118,39 @@ func (r rofiMenu) Show() (string, error) {
 
 	menuStr := ""
 
+	keyIndex := 0
+	functionMap := make(map[int]*KeyAction)
+
 	for i := 0; i < len(kbMatrix); i++ {
 		for j := 0; j < len(kbMatrix[i]); j++ {
 			key := kbMatrix[i][j]
 			if act, ok := r.actionMap[key]; ok {
 				menuStr += fmt.Sprintf("<b>%s</b>: <small><i>%s</i></small>\000display\x1f%s|", strings.ToUpper(string(key)), act.Label, string(key))
+				functionMap[keyIndex] = &act
 			} else if key != ' ' {
 				menuStr += fmt.Sprintf("<b>%s</b>:   |", strings.ToUpper(string(key)))
 			} else {
 				menuStr += " |"
 			}
+			keyIndex++
 		}
 	}
 
 	p = script.Echo(menuStr).Exec(cmdStr)
-	return p.String()
+	strIndex, err := p.String()
+	if err != nil {
+		return "", err
+	}
+	selIndex, err := strconv.Atoi(strings.TrimSpace(strIndex))
+	if err != nil {
+		return "", err
+	}
 
+	if selAction, ok := functionMap[selIndex]; ok {
+		return selAction.Action(), nil
+	}
+
+	return "", fmt.Errorf("não há função atribuida a tecla")
 }
 
 func (r rofiMenu) Run(input string) (string, error) {
@@ -178,20 +196,20 @@ type builder struct {
 func (r builder) buildArgs() string {
 	argSlice := make([]string, 0)
 
-	argSlice = linux.AppendIf(argSlice, rofiMode, r.mode)
-	argSlice = linux.AppendIf(argSlice, rofiDmenu, r.dMenu)
+	argSlice = wrappers.AppendIf(argSlice, rofiMode, r.mode)
+	argSlice = wrappers.AppendIf(argSlice, rofiDmenu, r.dMenu)
 
-	argSlice = linux.AppendIf(argSlice, rofiPrompt, r.prompt)
-	argSlice = linux.AppendIf(argSlice, rofiAutoSelect, r.autoSelect)
+	argSlice = wrappers.AppendIf(argSlice, rofiPrompt, r.prompt)
+	argSlice = wrappers.AppendIf(argSlice, rofiAutoSelect, r.autoSelect)
 
-	argSlice = linux.AppendIf(argSlice, rofiThemeStr, r.themeStr)
-	argSlice = linux.AppendIf(argSlice, rofiFormat, r.format)
-	argSlice = linux.AppendIf(argSlice, rofiErrMsg, r.errMessage)
-	argSlice = linux.AppendIf(argSlice, rofiSep, r.sep)
-	argSlice = linux.AppendIf(argSlice, rofiCaseInsensitive, r.caseInsensitive)
-	argSlice = linux.AppendIf(argSlice, rofiPangoMarkup, r.pangoMarkup)
-	argSlice = linux.AppendIf(argSlice, rofiSelect, r.rselect)
-	argSlice = linux.AppendIf(argSlice, rofiMatching, r.matching)
+	argSlice = wrappers.AppendIf(argSlice, rofiThemeStr, r.themeStr)
+	argSlice = wrappers.AppendIf(argSlice, rofiFormat, r.format)
+	argSlice = wrappers.AppendIf(argSlice, rofiErrMsg, r.errMessage)
+	argSlice = wrappers.AppendIf(argSlice, rofiSep, r.sep)
+	argSlice = wrappers.AppendIf(argSlice, rofiCaseInsensitive, r.caseInsensitive)
+	argSlice = wrappers.AppendIf(argSlice, rofiPangoMarkup, r.pangoMarkup)
+	argSlice = wrappers.AppendIf(argSlice, rofiSelect, r.rselect)
+	argSlice = wrappers.AppendIf(argSlice, rofiMatching, r.matching)
 	return strings.Join(argSlice, " ")
 
 }

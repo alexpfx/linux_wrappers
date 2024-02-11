@@ -1,23 +1,10 @@
-package linux
+package wrappers
 
 import (
 	"fmt"
 	"log"
 	"reflect"
 )
-
-type KeyAction struct {
-	Label  string
-	Action func() string
-}
-
-type RofiKeyboard interface {
-	Show() (string, error)
-}
-
-type Rofi interface {
-	Run(input string) (string, error)
-}
 
 type WType interface {
 	Run(text string) (string, error)
