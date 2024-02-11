@@ -1,6 +1,7 @@
 package rofi
 
 import (
+	"fmt"
 	"github.com/alexpfx/linux_wrappers/linux"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -39,11 +40,18 @@ func TestNewKeyboardMenu(t *testing.T) {
 			'a': {
 				Label: "Hora",
 				Action: func() string {
-					return "a"
+					return "hora"
+				},
+			},
+			'm': {
+				Label: "Massa",
+				Action: func() string {
+					return "massa"
 				},
 			},
 		})
-		_, err := rofi.Show()
+		out, err := rofi.Show()
+		fmt.Println(out)
 		assert.NoError(t, err, "Nao esperava erro")
 	})
 }
