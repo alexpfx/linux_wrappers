@@ -5,15 +5,10 @@ type KeyAction struct {
 	Action func() string
 }
 
-type RofiKeyboard interface {
-	DMenu() (string, error)
+type KeyboardLayout interface {
+	Show() (string, error)
 }
 
 type Rofi interface {
 	ShowDMenu(input string) (string, error)
-}
-
-type Response struct {
-	Output string
-	Err    error
 }

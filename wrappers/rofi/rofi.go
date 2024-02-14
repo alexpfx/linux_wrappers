@@ -91,7 +91,7 @@ func NewMessage(errMsg string) Rofi {
 
 }
 
-func NewKeyboardMenu(actionMap map[rune]KeyAction) RofiKeyboard {
+func NewKeyboardMenu(actionMap map[rune]KeyAction) KeyboardLayout {
 	b := builder{
 		autoSelect:      true,
 		dMenu:           true,
@@ -109,7 +109,7 @@ func NewKeyboardMenu(actionMap map[rune]KeyAction) RofiKeyboard {
 	}
 }
 
-func (r rofiMenu) DMenu() (string, error) {
+func (r rofiMenu) Show() (string, error) {
 	var p *script.Pipe
 	cmdStr := fmt.Sprintf("%s %s", rofiCmd, r.args)
 

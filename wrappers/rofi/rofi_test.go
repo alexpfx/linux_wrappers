@@ -49,7 +49,7 @@ func TestNewKeyboardMenu(t *testing.T) {
 				},
 			},
 		})
-		out, err := rofi.DMenu()
+		out, err := rofi.Show()
 		fmt.Println(out)
 		assert.NoError(t, err, "Nao esperava erro")
 	})
