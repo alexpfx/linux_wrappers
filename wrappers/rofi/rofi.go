@@ -78,18 +78,15 @@ func NewKeyboardMenu(actionMap map[rune]KeyAction) RofiKeyboard {
 element {
     padding: 2px ;
     cursor:  pointer;
-    spacing: 5px ;
-    border:  1;
+	border:  1;
 	children: [ element-text ];
 
 }
 listview {
-    padding:      2px 2px 2px ;
     scrollbar:    false;
-    border-color: var(separatorcolor);
-    spacing:      5px ;
+    spacing:      2px ;
     fixed-height: 0;
-    border:       1px dash 1px 1px ;
+    border:       0px dash 0px 0px ;
     columns: 11 ;
     fixed-columns: true ;
     lines:  4;
@@ -125,10 +122,10 @@ func (r rofiMenu) Show() (string, error) {
 		for j := 0; j < len(kbMatrix[i]); j++ {
 			key := kbMatrix[i][j]
 			if act, ok := r.actionMap[key]; ok {
-				menuStr += fmt.Sprintf("<b>%s</b>: <small><i>%s</i></small>\000display\x1f%s|", strings.ToUpper(string(key)), act.Label, string(key))
+				menuStr += fmt.Sprintf("<b>%s</b> <small><i>%s</i></small>\000display\x1f%s|", strings.ToUpper(string(key)), act.Label, string(key))
 				functionMap[keyIndex] = &act
 			} else if key != ' ' {
-				menuStr += fmt.Sprintf("<b>%s</b>:   |", strings.ToUpper(string(key)))
+				menuStr += fmt.Sprintf("<b>%s</b>   |", strings.ToUpper(string(key)))
 			} else {
 				menuStr += " |"
 			}
