@@ -6,11 +6,11 @@ type KeyAction struct {
 }
 
 type RofiKeyboard interface {
-	Show() (string, error)
+	DMenu() (string, error)
 }
 
 type Rofi interface {
-	Run(input string) (string, error)
+	ShowDMenu(input string) (string, error)
 }
 
 type Response struct {

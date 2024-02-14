@@ -17,25 +17,29 @@ const wtypeDelayBeforeKeyStrokes = "-s"
 const wtypePressKey = "-P"
 const wtypeReleaseKey = "-p"
 
+type WType interface {
+	ShowDMenu(text string) (string, error)
+}
+
 type wtype struct {
 	args string
 }
 
-func (w wtype) Run(text string) (string, error) {
+func (w wtype) ShowDMenu(text string) (string, error) {
 	cmdStr := fmt.Sprintf(`%s %s '%s'`, wtypeCmd, w.args, text)
 	log.Printf("cmd: %s", cmdStr)
 	p := script.Exec(cmdStr)
 	return p.String()
 }
 
-func NewWType(builder WTypeBuilder) wrappers.WType {
+func New(builder Builder) WType {
 	args := builder.buildArgs()
 	return wtype{
 		args: args,
 	}
 }
 
-type WTypeBuilder struct {
+type Builder struct {
 	PressModifier          string
 	ReleaseModifier        string
 	PressKey               string
@@ -45,7 +49,7 @@ type WTypeBuilder struct {
 	DelayBeforeKeyStrokes  string
 }
 
-func (r WTypeBuilder) buildArgs() string {
+func (r Builder) buildArgs() string {
 	argSlice := make([]string, 0)
 
 	argSlice = wrappers.AppendIf(argSlice, wtypePressMod, r.PressModifier)

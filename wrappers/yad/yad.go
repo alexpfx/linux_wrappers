@@ -2,11 +2,14 @@ package yad
 
 import (
 	"fmt"
-	"github.com/alexpfx/linux_wrappers/wrappers"
 	"github.com/bitfield/script"
 	"log"
 	"strings"
 )
+
+type Yad interface {
+	DMenu() (string, error)
+}
 
 type Btn struct {
 	Label string
@@ -22,7 +25,7 @@ var (
 	}
 )
 
-func NewButtonBar(keymap []Btn) wrappers.Yad {
+func NewButtonBar(keymap []Btn) Yad {
 	btns := make([]string, 0)
 	for _, keys := range lines {
 		for _, key := range keys {
@@ -39,7 +42,7 @@ type yad struct {
 	args string
 }
 
-func (r yad) Show() (string, error) {
+func (r yad) DMenu() (string, error) {
 	cmdStr := fmt.Sprintf("%s %s", "yad", r.args)
 	log.Println(cmdStr)
 	pipe := script.Exec(cmdStr)

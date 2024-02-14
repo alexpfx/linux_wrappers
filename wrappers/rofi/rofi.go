@@ -23,6 +23,32 @@ const (
 	rofiPangoMarkup     = "-markup-rows"
 	rofiMatching        = "-matching"
 )
+const themeStr = `
+element {
+    padding: 2px ;
+    cursor:  pointer;
+	border:  1;
+	children: [ element-text ];
+}
+listview {
+    scrollbar:    false;
+    spacing:      2px ;
+    fixed-height: 0;
+    border:       0px dash 0px 0px ;
+    columns: 11 ;
+    fixed-columns: true ;
+    lines:  4;
+    flow: horizontal;
+}
+element-text {
+    background-color: transparent;
+    cursor:           inherit;
+    highlight:        inherit;
+    text-color:       inherit;
+    vertical-align: 0.5;
+    horizontal-align: 0.1;
+}
+`
 
 var kbMatrix = [4][11]rune{
 	{
@@ -44,7 +70,7 @@ type rofiMenu struct {
 	actionMap map[rune]KeyAction
 }
 
-func NewDMenu(prompt string) Rofi {
+func New(prompt string) Rofi {
 	b := builder{
 		dMenu:  true,
 		prompt: prompt,
@@ -55,7 +81,7 @@ func NewDMenu(prompt string) Rofi {
 	}
 }
 
-func NewMessageMenu(errMsg string) Rofi {
+func NewMessage(errMsg string) Rofi {
 	b := builder{
 		errMessage: errMsg,
 	}
@@ -74,33 +100,7 @@ func NewKeyboardMenu(actionMap map[rune]KeyAction) RofiKeyboard {
 		format:          "i",
 		pangoMarkup:     true,
 		matching:        "prefix",
-		themeStr: `
-element {
-    padding: 2px ;
-    cursor:  pointer;
-	border:  1;
-	children: [ element-text ];
-
-}
-listview {
-    scrollbar:    false;
-    spacing:      2px ;
-    fixed-height: 0;
-    border:       0px dash 0px 0px ;
-    columns: 11 ;
-    fixed-columns: true ;
-    lines:  4;
-    flow: horizontal;
-}
-element-text {
-    background-color: transparent;
-    cursor:           inherit;
-    highlight:        inherit;
-    text-color:       inherit;
-    vertical-align: 0.5;
-    horizontal-align: 0.1;
-}
-`,
+		themeStr:        themeStr,
 	}
 
 	return rofiMenu{
@@ -109,7 +109,7 @@ element-text {
 	}
 }
 
-func (r rofiMenu) Show() (string, error) {
+func (r rofiMenu) DMenu() (string, error) {
 	var p *script.Pipe
 	cmdStr := fmt.Sprintf("%s %s", rofiCmd, r.args)
 
@@ -150,7 +150,7 @@ func (r rofiMenu) Show() (string, error) {
 	return "", fmt.Errorf("não há função atribuida a tecla")
 }
 
-func (r rofiMenu) Run(input string) (string, error) {
+func (r rofiMenu) ShowDMenu(input string) (string, error) {
 	var p *script.Pipe
 	cmdStr := fmt.Sprintf("%s %s", rofiCmd, r.args)
 	if input == "" {

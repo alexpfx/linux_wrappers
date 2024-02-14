@@ -6,14 +6,6 @@ import (
 	"reflect"
 )
 
-type WType interface {
-	Run(text string) (string, error)
-}
-
-type Yad interface {
-	Show() (string, error)
-}
-
 func AppendIf(res []string, argName string, pValue interface{}) []string {
 	if pValue == nil {
 		return res

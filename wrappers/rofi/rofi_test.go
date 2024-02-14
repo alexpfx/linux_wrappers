@@ -18,8 +18,8 @@ func TestNewRofi(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rofi := NewDMenu(tt.args.prompt)
-			_, err := rofi.Run("teste")
+			rofi := New(tt.args.prompt)
+			_, err := rofi.ShowDMenu("teste")
 			assert.NoError(t, err, "Nao esperava erro")
 		})
 	}
@@ -27,8 +27,8 @@ func TestNewRofi(t *testing.T) {
 
 func TestNewMessageMenu(t *testing.T) {
 	t.Run("t1", func(t *testing.T) {
-		rofi := NewMessageMenu("mensagem de erro")
-		_, err := rofi.Run("")
+		rofi := NewMessage("mensagem de erro")
+		_, err := rofi.ShowDMenu("")
 		assert.NoError(t, err, "Nao esperava erro")
 	})
 }
@@ -49,7 +49,7 @@ func TestNewKeyboardMenu(t *testing.T) {
 				},
 			},
 		})
-		out, err := rofi.Show()
+		out, err := rofi.DMenu()
 		fmt.Println(out)
 		assert.NoError(t, err, "Nao esperava erro")
 	})

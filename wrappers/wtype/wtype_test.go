@@ -8,7 +8,7 @@ import (
 func TestNewWType(t *testing.T) {
 
 	t.Run("t1", func(t *testing.T) {
-		w := NewWType(WTypeBuilder{
+		w := New(Builder{
 			PressModifier:         "",
 			ReleaseModifier:       "",
 			PressKey:              "",
@@ -17,7 +17,7 @@ func TestNewWType(t *testing.T) {
 			DelayBeforeKeyStrokes: "1100",
 		})
 
-		r, err := w.Run("texto$")
+		r, err := w.ShowDMenu("texto$")
 		assert.NoError(t, err, r)
 
 	})
