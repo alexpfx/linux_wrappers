@@ -18,14 +18,14 @@ const wtypePressKey = "-P"
 const wtypeReleaseKey = "-p"
 
 type WType interface {
-	ShowDMenu(text string) (string, error)
+	Type(text string) (string, error)
 }
 
 type wtype struct {
 	args string
 }
 
-func (w wtype) ShowDMenu(text string) (string, error) {
+func (w wtype) Type(text string) (string, error) {
 	cmdStr := fmt.Sprintf(`%s %s '%s'`, wtypeCmd, w.args, text)
 	log.Printf("cmd: %s", cmdStr)
 	p := script.Exec(cmdStr)
