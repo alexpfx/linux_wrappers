@@ -1,4 +1,4 @@
-version = "v0.0.11"
+version = "v0.0.14"
 
 release:
 	git tag $(version)
